@@ -97,7 +97,7 @@ s0.goTo(6400)
 # s0.start_go_to_position()
 # are non blocking and allow you to enter commands on the stepper while the command completes.
 #
-# You may ask yourself why would you ever use the blocking commands? Well here is the deal. MOST motion commands such as:
+# You may ask yourself why would you ever use the blocking commands? Well here is the deal. MOST motion commands such as
 # s0.relative_move()
 # s0.go_to_position()
 # and even
