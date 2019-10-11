@@ -13,6 +13,8 @@ from pidev.kivy import ImageButton
 
 from pidev.stepper import stepper
 import spidev
+from time import sleep
+import RPi.GPIO as GPIO
 spi = spidev.SpiDev()
 
 MIXPANEL_TOKEN = "x"
@@ -36,7 +38,7 @@ class ProjectNameGUI(App):
         return SCREEN_MANAGER
 
 
-Window.clearcolor = (0, 0, 0, 1)  # White
+Window.clearcolor = (1, 1, 1, 1)  # White
 
 
 class MainScreen(Screen):
@@ -45,19 +47,22 @@ class MainScreen(Screen):
     """
     s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
                  steps_per_unit=200, speed=8)
-    go = False
-    direction_pin = 1
+    go = True
+    direction_pin = -1
 
     def pressed(self):
         self.go = not self.go
         if self.go:
-            self.s0.run(self.direction_pin, 8)
+            self.s0.start_relative_move(self.direction_pin)
+            #self.s0.run(self.direction_pin, 8)
+            self.ids.motor.text = "Motor On"
         else:
             self.s0.softStop()
+            self.ids.motor.text = "Motor Off"
 
     def direction(self):
         if self.direction_pin == 1:
-            self. direction_pin = 0
+            self. direction_pin = (-1)
         else:
             self.direction_pin = 1
 
