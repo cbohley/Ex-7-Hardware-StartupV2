@@ -46,15 +46,20 @@ class MainScreen(Screen):
     s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
                  steps_per_unit=200, speed=8)
     go = False
+    direction_pin = 1
 
     def pressed(self):
         self.go = not self.go
-        if(self.go):
-            self.s0.run(1, 8)
+        if self.go:
+            self.s0.run(self.direction_pin, 8)
         else:
             self.s0.softStop()
 
-
+    def direction(self):
+        if self.direction_pin == 1:
+            self. direction_pin = 0
+        else:
+            self.direction_pin = 1
 
     def admin_action(self):
         """
