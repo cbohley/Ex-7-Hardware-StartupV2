@@ -21,6 +21,24 @@
         color: 1, 0, 0, 1
         on_press: root.direction()
 
+    Slider:
+        size_hint: .5, None
+        id: slider
+        min: 10
+        max: 25
+        value: 15
+        background_width: 100
+        step: 1
+        x: root.width *.05
+        y: root.height * .3
+
+    Label:
+        text: "Speed: " + str(int(slider.value))
+        font_size: 30
+        x: root.width *.2
+        y: root.height *.2
+        color: 1,0,1,1
+
     ImageButton:
         id: logo_image_button
         source: "../../pidev/kivy/images/DPEALogoTransparent.png"

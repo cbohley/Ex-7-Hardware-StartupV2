@@ -47,24 +47,36 @@ class MainScreen(Screen):
     """
     s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
                  steps_per_unit=200, speed=8)
-    go = True
-    direction_pin = -1
+    go = False
+    direction_pin = 1
+    counter = 0
+    counter2 = 0
 
     def pressed(self):
-        self.go = not self.go
+        self.counter += 1
+        if self.counter % 2 == 0:
+            self.go = not self.go
+
         if self.go:
-            self.s0.start_relative_move(self.direction_pin)
-            #self.s0.run(self.direction_pin, 8)
+            self.s0.run(self.direction_pin, int(self.ids.slider.value))
             self.ids.motor.text = "Motor On"
+            print(self.go)
         else:
             self.s0.softStop()
             self.ids.motor.text = "Motor Off"
+            print(self.go)
 
     def direction(self):
-        if self.direction_pin == 1:
-            self. direction_pin = (-1)
-        else:
-            self.direction_pin = 1
+        self.counter2 += 1
+        if self.counter2 % 2 == 0:
+            if self.direction_pin == 1:
+                self. direction_pin = 0
+                self.ids.direction.text = "Clockwise"
+                print(self. direction_pin)
+            else:
+                self.direction_pin = 1
+                self.ids.direction.text = "Counter-Clockwise"
+                print(self.direction_pin)
 
     def admin_action(self):
         """
