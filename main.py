@@ -46,7 +46,7 @@ class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
     """
-    s0 = stepper(port=1, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
+    s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
                  steps_per_unit=200, speed=8)
     go = False
     direction_pin = 1
@@ -73,13 +73,16 @@ class MainScreen(Screen):
             self.s0.run(self.direction_pin, int(self.ids.slider.value))
 
     def motor(self):
-
+        self.s0.set_as_home()
+        print(self.s0.get_position_in_units())
         self.ids.updates.text = str(self.s0.get_position_in_units())
-        self.s0.set_speed(20)
-        self.s0.start_relative_move(15)
+        self.s0.set_speed(1)
+        self.s0.start_go_to_position(5)
+        print(self.s0.get_position_in_units())
         self.ids.updates.text = str(self.s0.get_position_in_units())
         time.sleep(10)
 
+        """
         self.s0.set_speed(40)
         self.s0.start_relative_move(10)
         self.ids.updates.text = str(self.s0.get_position_in_units())
@@ -96,7 +99,7 @@ class MainScreen(Screen):
 
         self.s0.goHome()
         self.ids.updates.text = str(self.s0.get_position_in_units())
-
+        """
     def admin_action(self):
         """
         Hidden admin button touch event. Transitions to passCodeScreen.
