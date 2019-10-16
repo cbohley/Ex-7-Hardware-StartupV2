@@ -15,8 +15,10 @@ from pidev.stepper import stepper
 import spidev
 from time import sleep
 import RPi.GPIO as GPIO
+
 spi = spidev.SpiDev()
 import time
+import threading
 
 MIXPANEL_TOKEN = "x"
 MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
@@ -64,7 +66,7 @@ class MainScreen(Screen):
 
     def direction(self):
         if self.direction_pin == 1:
-            self. direction_pin = 0
+            self.direction_pin = 0
             self.ids.direction.text = "Clockwise"
             self.s0.run(self.direction_pin, int(self.ids.slider.value))
         else:
@@ -72,34 +74,37 @@ class MainScreen(Screen):
             self.ids.direction.text = "Counter-Clockwise"
             self.s0.run(self.direction_pin, int(self.ids.slider.value))
 
+    def motor_thread(self):
+        y = threading.Thread(target=self.motor, daemon=True)
+        y.start()
+
     def motor(self):
         self.s0.set_as_home()
         print(self.s0.get_position_in_units())
         self.ids.updates.text = str(self.s0.get_position_in_units())
         self.s0.set_speed(1)
-        self.s0.start_go_to_position(5)
+        self.s0.go_to_position(15)
         print(self.s0.get_position_in_units())
         self.ids.updates.text = str(self.s0.get_position_in_units())
         time.sleep(10)
 
-        """
-        self.s0.set_speed(40)
-        self.s0.start_relative_move(10)
+        self.s0.set_speed(5)
+        self.s0.relative_move(10)
         self.ids.updates.text = str(self.s0.get_position_in_units())
         time.sleep(8)
 
-        self.s0.goHome()
+        self.s0.relative_move(-25)
         self.ids.updates.text = str(self.s0.get_position_in_units())
         time.sleep(30)
 
-        self.s0.set_speed(20)
-        self.s0.start_relative_move(-100)
+        self.s0.set_speed(8)
+        self.s0.relative_move(-100)
         self.ids.updates.text = str(self.s0.get_position_in_units())
         time.sleep(10)
 
-        self.s0.goHome()
-        self.ids.updates.text = str(self.s0.get_position_in_units())
-        """
+        self.s0.relative_move(100)
+        self.ids.updates.text = "Finished: " + str(self.s0.get_position_in_units())
+
     def admin_action(self):
         """
         Hidden admin button touch event. Transitions to passCodeScreen.
@@ -122,8 +127,10 @@ class AdminScreen(Screen):
         """
         Builder.load_file('AdminScreen.kv')
 
-        PassCodeScreen.set_admin_events_screen(ADMIN_SCREEN_NAME)  # Specify screen name to transition to after correct password
-        PassCodeScreen.set_transition_back_screen(MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to Game is pressed"
+        PassCodeScreen.set_admin_events_screen(
+            ADMIN_SCREEN_NAME)  # Specify screen name to transition to after correct password
+        PassCodeScreen.set_transition_back_screen(
+            MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to Game is pressed"
 
         super(AdminScreen, self).__init__(**kwargs)
 
@@ -150,6 +157,8 @@ class AdminScreen(Screen):
         :return: None
         """
         quit()
+
+
 """
 Widget additions
 """
