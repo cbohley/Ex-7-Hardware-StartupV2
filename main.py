@@ -65,14 +65,15 @@ class MainScreen(Screen):
             self.ids.motor.text = "Motor Off"
 
     def direction(self):
-        if self.direction_pin == 1:
-            self.direction_pin = 0
-            self.ids.direction.text = "Clockwise"
-            self.s0.run(self.direction_pin, int(self.ids.slider.value))
-        else:
-            self.direction_pin = 1
-            self.ids.direction.text = "Counter-Clockwise"
-            self.s0.run(self.direction_pin, int(self.ids.slider.value))
+        if self.go:
+            if self.direction_pin == 1:
+                self.direction_pin = 0
+                self.ids.direction.text = "Clockwise"
+                self.s0.run(self.direction_pin, int(self.ids.slider.value))
+            else:
+                self.direction_pin = 1
+                self.ids.direction.text = "Counter-Clockwise"
+                self.s0.run(self.direction_pin, int(self.ids.slider.value))
 
     def motor_thread(self):
         y = threading.Thread(target=self.motor, daemon=True)
