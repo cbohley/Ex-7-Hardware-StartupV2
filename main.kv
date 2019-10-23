@@ -1,5 +1,6 @@
 <MainScreen>:
     name: 'main'
+
     FloatLayout:
         size_hint: None, None
 
@@ -54,3 +55,12 @@
         x: root.width *.05
         y: root.height *.2
         color: 1,0,1,1
+
+    DPEAButton:
+        id: flip
+        text: 'Flip'
+        size: 100, 100
+        x: root.width * 0.75
+        y: root.height * 0.75
+        color: 0, 0, 1, 1
+        on_press: root.flip()

@@ -12,6 +12,8 @@ from pidev.kivy import DPEAButton
 from pidev.kivy import ImageButton
 
 from pidev.stepper import stepper
+from Slush.Devices import L6470Registers
+from pidev.Cyprus_Commands import Cyprus_Commands_RPi as cyprus
 import spidev
 from time import sleep
 import RPi.GPIO as GPIO
@@ -50,8 +52,25 @@ class MainScreen(Screen):
     """
     s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
                  steps_per_unit=200, speed=8)
+    cyprus.initialize()
+    cyprus.setup_servo(1)
+
     go = False
     direction_pin = 1
+
+    def thread_flip(self):
+        y = threading.Thread(target=self.flip, daemon=True)
+        y.start()
+
+    def flip(self):
+        if cyprus.read_gpio() & 0B0001:
+            time.sleep(.05)
+            if cyprus.read_gpio() & 0B0001:
+                cyprus.set_servo_position(1, 1)
+                self.ids.flip.text = "180 Degrees"
+            else:
+                cyprus.set_servo_position(1, 0)
+                self.ids.flip.text = "0 Degrees"
 
     def pressed(self):
 
