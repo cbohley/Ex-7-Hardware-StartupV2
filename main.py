@@ -44,7 +44,7 @@ class ProjectNameGUI(App):
 
 
 Window.clearcolor = (1, 1, 1, 1)  # White
-
+cyprusState = False
 
 class MainScreen(Screen):
     """
@@ -65,20 +65,25 @@ class MainScreen(Screen):
     def flip(self):
         if cyprus.read_gpio() & 0B0001:
             time.sleep(.05)
-            if cyprus.read_gpio() & 0B0001:
+            if (cyprus.read_gpio() & 0B0001) == 1:
                 cyprus.set_servo_position(1, 1)
                 self.ids.flip.text = "180 Degrees"
             else:
                 cyprus.set_servo_position(1, 0)
                 self.ids.flip.text = "0 Degrees"
+
     def newFlip(self):
-        cyprusState = False
+        global cyprusState
         if cyprusState:
             cyprus.set_servo_position(1, 1)
-            cyprusState = True
+            print(cyprusState)
+            cyprusState = False
         else:
             cyprus.set_servo_position(1, 0)
-            cyprusState = False
+            cyprusState = True
+            print(cyprusState)
+
+
     def pressed(self):
 
         self.go = not self.go
