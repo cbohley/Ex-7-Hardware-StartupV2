@@ -71,7 +71,14 @@ class MainScreen(Screen):
             else:
                 cyprus.set_servo_position(1, 0)
                 self.ids.flip.text = "0 Degrees"
-
+    def newFlip(self):
+        cyprusState = False
+        if cyprusState:
+            cyprus.set_servo_position(1, 1)
+            cyprusState = True
+        else:
+            cyprus.set_servo_position(1, 0)
+            cyprusState = False
     def pressed(self):
 
         self.go = not self.go
