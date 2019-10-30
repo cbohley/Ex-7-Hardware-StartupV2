@@ -63,14 +63,17 @@ class MainScreen(Screen):
         y.start()
 
     def flip(self):
-        if cyprus.read_gpio() & 0B0001:
-            time.sleep(.05)
-            if (cyprus.read_gpio() & 0B0001) == 1:
-                cyprus.set_servo_position(1, 1)
-                self.ids.flip.text = "180 Degrees"
+        while True:
+            if cyprus.read_gpio() & 0B0001:
+                sleep(.05)
+                if cyprus.read_gpio() & 0B0001:
+                    cyprus.set_servo_position(1, 1)
+                    self.ids.flip.text = "180 Degrees"
+                    print("I hear this")
             else:
                 cyprus.set_servo_position(1, 0)
                 self.ids.flip.text = "0 Degrees"
+                print("I am so bad")
 
     def newFlip(self):
         global cyprusState
@@ -188,6 +191,7 @@ class AdminScreen(Screen):
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
         """
+        cyprus.close()
         quit()
 
 
