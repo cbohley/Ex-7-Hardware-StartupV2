@@ -57,6 +57,7 @@ class MainScreen(Screen):
     cyprus.initialize()
     cyprus.setup_servo(1)
 
+
     go = False
     direction_pin = 1
 
@@ -69,13 +70,15 @@ class MainScreen(Screen):
             if cyprus.read_gpio() & 0B0001:
                 sleep(.05)
                 if cyprus.read_gpio() & 0B0001:
-                    cyprus.set_servo_position(1, 1)
+                    cyprus.set_pwm_values(1, period_value=1000, compare_value=500, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
                     self.ids.flip.text = "180 Degrees"
                     print("I hear this")
             else:
-                cyprus.set_servo_position(1, 0.5)
-                self.ids.flip.text = "0 Degrees"
-                print("I am so bad")
+                sleep(0.05)
+                if not (cyprus.read_gpio() & 0B0001):
+                    cyprus.set_pwm_values(1, period_value=1000, compare_value=0, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
+                    self.ids.flip.text = "0 Degrees"
+                    print("I am so bad")
 
     def newFlip(self):
         global cyprusState
