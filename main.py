@@ -45,6 +45,7 @@ class ProjectNameGUI(App):
 
 Window.clearcolor = (1, 1, 1, 1)  # White
 cyprusState = False
+talon = False
 
 class MainScreen(Screen):
     """
@@ -71,7 +72,7 @@ class MainScreen(Screen):
                     self.ids.flip.text = "180 Degrees"
                     print("I hear this")
             else:
-                cyprus.set_servo_position(1, 0)
+                cyprus.set_servo_position(1, 0.5)
                 self.ids.flip.text = "0 Degrees"
                 print("I am so bad")
 
