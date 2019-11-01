@@ -47,6 +47,7 @@ Window.clearcolor = (1, 1, 1, 1)  # White
 cyprusState = False
 talon = False
 
+
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
@@ -86,7 +87,6 @@ class MainScreen(Screen):
             cyprus.set_servo_position(1, 0)
             cyprusState = True
             print(cyprusState)
-
 
     def pressed(self):
 
@@ -192,7 +192,10 @@ class AdminScreen(Screen):
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
         """
+        cyprus.set_servo_position(1, .5)
         cyprus.close()
+        spi.close()
+        GPIO.cleanup()
         quit()
 
 
