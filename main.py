@@ -70,13 +70,13 @@ class MainScreen(Screen):
             if cyprus.read_gpio() & 0B0001:
                 sleep(.05)
                 if cyprus.read_gpio() & 0B0001:
-                    cyprus.set_pwm_values(1, period_value=1000, compare_value=500, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
+                    cyprus.set_pwm_values(1, period_value=10000, compare_value=5000, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
                     self.ids.flip.text = "180 Degrees"
                     print("I hear this")
             else:
                 sleep(0.05)
                 if not (cyprus.read_gpio() & 0B0001):
-                    cyprus.set_pwm_values(1, period_value=1000, compare_value=0, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
+                    cyprus.set_pwm_values(1, period_value=10000, compare_value=0, compare_mode=cyprus.LESS_THAN_OR_EQUAL)
                     self.ids.flip.text = "0 Degrees"
                     print("I am so bad")
 
